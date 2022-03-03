@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "module": "es6",
+    "target": "es2021",
+    "sourceMap": true,
+    "strict": true,
+    "outDir": "out",
+    "lib": [
+      "ES2021",
+      "dom"
+    ]
+  },
+  "exclude": [
+    "node_modules"
+  ]
+}

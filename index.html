@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Master Simulation</title>
+    <meta name="description"
+          content="Simple page for interacting with a simulation tool for MASTER: a scheduler and router for low power wireless networks">
+    <meta name="author" content="Nicholas Zubrisky">
+</head>
+<body>
+<div id="config_network_form">
+    <h3>Configure Network Options:</h3>
+    <label for="num_channels_input">Num Channels: </label>
+    <input id="num_channels_input">
+    <label for="etx_power_input">ETX Power: </label>
+    <input id="etx_power_input">
+    <label for="flow_length_input">Max Flow Length: </label>
+    <input id="flow_length_input">
+    <label for="scaling_factor_input">Sliding Window Scaling Factor: </label>
+    <input id="scaling_factor_input" pattern="[0-9]+">
+    <label for="retransmission_strategy_input">Max Flow Length: </label>
+    <select id="retransmission_strategy_input" autocomplete="off">
+        <option selected="selected" value="baseline">Baseline</option>
+        <option value="slot-based">Slot-Based</option>
+        <option value="SW2">SW2</option>
+        <option value="SW3">SW3</option>
+    </select>
+</div>
+<div id="add_node_form">
+    <h3>Enter a link:</h3>
+    <label for="nodeA_input">Node A: </label>
+    <input id="nodeA_input">
+    <label for="nodeB_input">Node B: </label>
+    <input id="nodeB_input">
+    <label for="etx_input">ETX Value of Link: </label>
+    <input id="etx_input">
+    <button id="add_node_btn">ADD</button>
+    <button id="clear_network_btn">CLEAR NETWORK</button>
+</div>
+<div id="display_network_form">
+    <p id="display_network">No Network</p>
+</div>
+<div id="add_flow_form">
+    <h3>Add Flow:</h3>
+    <label for="source_input">Source: </label>
+    <input id="source_input">
+    <label for="destination_input">Destination: </label>
+    <input id="destination_input">
+    <label for="release_time_input">Release Time: </label>
+    <input id="release_time_input" value="0">
+    <label for="deadline_input">Deadline: </label>
+    <input id="deadline_input" value="0">
+    <button id="add_flow_btn">ADD</button>
+    <button id="random_flow_btn">CREATE RANDOM FLOWS</button>
+    <button id="clear_flow_btn">CLEAR FLOWS</button>
+</div>
+<div id="display_routes_form">
+    <h3>Flow Routes:</h3>
+    <p id="display_routes">No Routes</p>
+</div>
+<div id="display_schedule_form">
+    <h3>Schedule:</h3>
+    <pre id="display_schedule">No Schedule</pre>
+</div>
+<div id="display_simulator_form">
+    <h3>Simulation:</h3>
+    <label for="sim_time_input">Enter simulation duration in ms: </label>
+    <input id="sim_time_input" pattern="[0-9]+">
+    <button id="sim_network_btn">SIMULATE RANDOM TRANSMISSIONS</button>
+    <button id="sim_schedule_btn">SIMULATE CREATED SCHEDULE ONLY</button>
+    <pre id="display_sim_results"></pre>
+</div>
+<script type="module" src="./out/index.js"></script>
+</body>
+</html>
