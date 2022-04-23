@@ -13,7 +13,6 @@ export class SlotFrame {
         this.channels = [];
         this.scheduledNodes = new Set();
     }
-
     /**
      * Attempt to schedule a hop in this timeslot. A hop can't be scheduled if there isn't an available channel or
      * one of the nodes has already been scheduled in this timeslot.
@@ -35,5 +34,4 @@ export class SlotFrame {
         return true;
     }
 }
-
 //# sourceMappingURL=SlotFrame.js.map

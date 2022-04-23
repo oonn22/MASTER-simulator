@@ -6,70 +6,169 @@
     <meta name="description"
           content="Simple page for interacting with a simulation tool for MASTER: a scheduler and router for low power wireless networks">
     <meta name="author" content="Nicholas Zubrisky">
+    <link rel="stylesheet" href="/static/styles.css">
 </head>
 <body>
-<div id="config_network_form">
-    <h3>Configure Network Options:</h3>
-    <label for="num_channels_input">Num Channels: </label>
-    <input id="num_channels_input">
-    <label for="etx_power_input">ETX Power: </label>
-    <input id="etx_power_input">
-    <label for="flow_length_input">Max Flow Length: </label>
-    <input id="flow_length_input">
-    <label for="scaling_factor_input">Sliding Window Scaling Factor: </label>
-    <input id="scaling_factor_input" pattern="[0-9]+">
-    <label for="retransmission_strategy_input">Max Flow Length: </label>
-    <select id="retransmission_strategy_input" autocomplete="off">
-        <option selected="selected" value="baseline">Baseline</option>
-        <option value="slot-based">Slot-Based</option>
-        <option value="SW2">SW2</option>
-        <option value="SW3">SW3</option>
-    </select>
+<div class="flex-container">
+    <div class="flex-row-container">
+        <div class="network-graph-container flex-row-container border">
+            <p id="info_paragraph" class="info-text">
+                This page allows you to simulate MASTER, a centralized router and scheduler for low power wireless
+                networks. Add network nodes to the simulation using the 'Add New Link' form on the right by
+                specifying a name for each node and the ETX value of the connection connecting the added nodes.
+                The new node(s) will be displayed in a graph that will replace this text. A nodes connections to its
+                neighbours can be edited by clicking on the node in the graph and changing values in the 'Edit Link'
+                form. The network settings for MASTER can be adjusted below this text. These settings include the
+                number of channels the network has access to, the ETX power for MASTER to use which causes routing
+                to favour longer more stable routes for higher values, the maximum length of a flow, the sliding
+                window factor which increases reliability at a cost in latency for higher values, and the
+                retransmission strategy to use for flows. Flows can be created by specifying a message source and
+                destination in the 'Flows' section of the page. A flows routing will be displayed, and a schedule
+                for the flow will also be created. The performance of MASTER on the created network can be tested in
+                the 'Simulate Network' section, where the network can be tested against random flows for a set
+                duration or the created schedule from inputting flows can be simulated.
+            </p>
+            <svg id="network_graph" class="network-graph" style="display: none"></svg>
+        </div>
+        <div class="network-graph-options flex-container border">
+            <div class="network-graph-option">
+                <h3>Add New Link:</h3>
+                <div style="display: table">
+                    <div class="table-row">
+                        <label for="nodeA_input">Node A: </label>
+                        <input id="nodeA_input">
+                    </div>
+                    <div class="table-row">
+                        <label for="nodeB_input">Node B: </label>
+                        <input id="nodeB_input">
+                    </div>
+                    <div class="table-row">
+                        <label for="etx_input">ETX Value: </label>
+                        <input id="etx_input">
+                    </div>
+                </div>
+                <button id="add_node_btn" class="large-button">ADD</button>
+            </div>
+            <div class="network-graph-option">
+                <h3>Edit Link:</h3>
+                <div style="display: table">
+                    <div class="table-row">
+                        <label for="node_selected_display">Selected Node: </label>
+                        <p id="node_selected_display"></p>
+                    </div>
+                    <div class="table-row">
+                        <label for="neighbour_selected">Select a Neighbour: </label>
+                        <select id="neighbour_selected" autocomplete="off">
+                            <option selected="selected" value=""></option>
+                        </select>
+                    </div>
+                    <div class="table-row">
+                        <label for="new_etx_input">Edit Etx Value: </label>
+                        <input id="new_etx_input">
+                    </div>
+                </div>
+                <button id="edit_link_btn" disabled="disabled" class="large-button">SAVE VALUE</button>
+            </div>
+        </div>
+    </div>
+    <div class="flex-row-container">
+        <div class="network-options flex-row-container border">
+            <div class="flex-item network-option">
+                <label for="num_channels_input">Num Channels: </label>
+                <input id="num_channels_input" size="5">
+            </div>
+            <div class="flex-item network-option">
+                <label for="time_slot_size_input">TimeSlot Size (ms): </label>
+                <input id="time_slot_size_input" size="5">
+            </div>
+            <div class="flex-item network-option">
+                <label for="etx_power_input">ETX Power: </label>
+                <input id="etx_power_input" size="5">
+            </div>
+            <div class="flex-item network-option">
+                <label for="flow_length_input">Max Flow Length: </label>
+                <input id="flow_length_input" size="5">
+            </div>
+            <div class="flex-item network-option">
+                <label for="scaling_factor_input">Sliding Window Scaling Factor: </label>
+                <input id="scaling_factor_input" pattern="[0-9]+" size="5">
+            </div>
+            <div class="flex-item network-option">
+                <label for="retransmission_strategy_input">Retransmission Strategy: </label>
+                <select id="retransmission_strategy_input" autocomplete="off">
+                    <option selected="selected" value="baseline">Baseline</option>
+                    <option value="slot-based">Slot-Based</option>
+                    <option value="SW2">SW2</option>
+                    <option value="SW3">SW3</option>
+                </select>
+            </div>
+            <div class="flex-item network-option">
+                <button class="small-button" id="clear_network_btn">CLEAR NETWORK</button>
+            </div>
+        </div>
+    </div>
+    <div class="flex-container border">
+        <div class="flow-form flex-container">
+            <h3 class="left-right-padding">Flows: </h3>
+            <div class="flex-row-container flow-form-container">
+                <div class="flex-item">
+                    <div class="background-colour">
+                        <label for="source_input">Source: </label>
+                        <input id="source_input">
+                    </div>
+                    <div class="background-colour" style="padding-left: 8px">
+                        <label for="destination_input">Destination: </label>
+                        <input id="destination_input">
+                    </div>
+                    <div class="background-colour" style="padding-left: 8px">
+                        <button class="small-button" id="add_flow_btn">ADD FLOW</button>
+                    </div>
+                </div>
+            </div>
+            <div class="flex-item">
+                <pre id="flow_display">No Routed Flows</pre>
+            </div>
+            <div class="flex-row-container">
+                <div class="flex-item-right">
+                    <button class="large-button" style="margin-right: 110px" id="random_flow_btn">CREATE RANDOM FLOWS
+                    </button>
+                </div>
+                <div class="flex-item-left">
+                    <button class="large-button" style="margin-left: 110px" id="clear_flow_btn">CLEAR FLOWS</button>
+                </div>
+            </div>
+        </div>
+        <div class="flex-container" style="width: 100%; overflow: auto">
+            <h3 class="left-right-padding">Scheduled Flows: </h3>
+            <pre id="display_schedule" class="double-left-right-padding">No Schedule</pre>
+        </div>
+    </div>
+    <div class="flex-container border">
+        <div class="flex-container">
+            <h3 class="left-right-padding">Simulate Network: </h3>
+            <div class="flex-row-container">
+                <div class="flex-item">
+                    <div class="flex-row-container background-colour">
+                        <label for="sim_time_input">Enter simulation duration in ms: </label>
+                        <input id="sim_time_input" pattern="[0-9]+">
+                        <div class="background-colour" style="padding-left: 8px">
+                            <button class="small-button" id="sim_network_btn">SIMULATE RANDOM TRANSMISSIONS</button>
+                        </div>
+                        <div class="background-colour" style="padding-left: 8px">
+                            <button class="small-button" id="sim_schedule_btn">SIMULATE CREATED SCHEDULE ONLY</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="flex-item">
+                <pre id="display_sim_results">No Results</pre>
+            </div>
+        </div>
+    </div>
 </div>
-<div id="add_node_form">
-    <h3>Enter a link:</h3>
-    <label for="nodeA_input">Node A: </label>
-    <input id="nodeA_input">
-    <label for="nodeB_input">Node B: </label>
-    <input id="nodeB_input">
-    <label for="etx_input">ETX Value of Link: </label>
-    <input id="etx_input">
-    <button id="add_node_btn">ADD</button>
-    <button id="clear_network_btn">CLEAR NETWORK</button>
-</div>
-<div id="display_network_form">
-    <p id="display_network">No Network</p>
-</div>
-<div id="add_flow_form">
-    <h3>Add Flow:</h3>
-    <label for="source_input">Source: </label>
-    <input id="source_input">
-    <label for="destination_input">Destination: </label>
-    <input id="destination_input">
-    <label for="release_time_input">Release Time: </label>
-    <input id="release_time_input" value="0">
-    <label for="deadline_input">Deadline: </label>
-    <input id="deadline_input" value="0">
-    <button id="add_flow_btn">ADD</button>
-    <button id="random_flow_btn">CREATE RANDOM FLOWS</button>
-    <button id="clear_flow_btn">CLEAR FLOWS</button>
-</div>
-<div id="display_routes_form">
-    <h3>Flow Routes:</h3>
-    <p id="display_routes">No Routes</p>
-</div>
-<div id="display_schedule_form">
-    <h3>Schedule:</h3>
-    <pre id="display_schedule">No Schedule</pre>
-</div>
-<div id="display_simulator_form">
-    <h3>Simulation:</h3>
-    <label for="sim_time_input">Enter simulation duration in ms: </label>
-    <input id="sim_time_input" pattern="[0-9]+">
-    <button id="sim_network_btn">SIMULATE RANDOM TRANSMISSIONS</button>
-    <button id="sim_schedule_btn">SIMULATE CREATED SCHEDULE ONLY</button>
-    <pre id="display_sim_results"></pre>
-</div>
-<script type="module" src="./out/index.js"></script>
+<script src="/static/d3v4.js"></script>
+<script src="/static/cola.min.js"></script>
+<script src="/static/Graphing.js"></script>
+<script src="/out/index.js" type="module"></script>
 </body>
 </html>

@@ -43,7 +43,7 @@ export class Flow {
         this.nodeWithMsg = source;
         this.timeSlotsUsedToTransmit = 0;
 
-        Flow.nextId++;
+        Flow.nextId = (Flow.nextId + 1) % 256;
     }
 
     /**

@@ -1,0 +1,272 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,500;1,700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,400;0,500;1,700&display=swap');
+
+* {
+    background-color: #33658A;
+    font-family: 'Roboto', sans-serif;
+    color: #1A090D;
+}
+
+.graph-node {
+    stroke: #33658A;
+    stroke-width: 1.5px;
+    cursor: pointer;
+}
+
+.graph-link {
+    stroke: #999;
+    stroke-width: 3px;
+    stroke-opacity: 1;
+}
+
+.graph-label {
+    fill: white;
+    font-size: 25px;
+    text-anchor: middle;
+    cursor: pointer;
+}
+
+.border {
+    border-style: inset;
+    border-color: #33658A;
+}
+
+.background-colour {
+    background-color: #6cd4ff;
+}
+
+.left-right-padding {
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.double-left-right-padding {
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+.flex-container {
+    background-color: #6cd4ff;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+}
+
+.flex-row-container {
+    background-color: #6cd4ff;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+}
+
+.flex-item {
+    flex-grow: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #6cd4ff;
+}
+
+.flex-item-left {
+    flex-grow: 1;
+    display: flex;
+    justify-content: left;
+    align-items: flex-start;
+    background-color: #6cd4ff;
+}
+
+.flex-item-right {
+    flex-grow: 1;
+    display: flex;
+    justify-content: right;
+    align-items: flex-end;
+    background-color: #6cd4ff;
+}
+
+.network-graph-container {
+    flex-grow: 5;
+    background-color: #6cd4ff;
+    min-height: 700px;
+    align-items: center;
+}
+
+.network-graph {
+    background-color: #6cd4ff;
+    height: 100%;
+    width: 100%;
+}
+
+.info-text {
+    background-color: #6cd4ff;
+    display: flex;
+    padding: 8px;
+}
+
+.network-graph-options {
+    background-color: #6cd4ff;
+    flex-grow: 1;
+    padding-left: 7px;
+    padding-right: 7px;
+    min-width: 400px;
+    max-width: 400px;
+}
+
+.network-graph-options label {
+    display: table-cell;
+    width: 100%
+}
+
+.network-graph-options input {
+    background-color: white;
+    display: table-cell;
+}
+
+.network-graph-options button {
+    width: 100%;
+    margin-top: 5px;
+}
+
+.network-graph-options select {
+    width: 100%;
+}
+
+.network-graph-options p {
+    background-color: #6cd4ff;
+    display: table-cell;
+    text-align: center;
+}
+
+.network-graph-option {
+    background-color: #6cd4ff;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+.network-graph-option label {
+    white-space: nowrap;
+}
+
+.network-options {
+    background-color: #6cd4ff;
+    flex-grow: 1;
+}
+
+.network-option {
+    background-color: #6cd4ff;
+    flex-direction: row;
+}
+
+.network-option button {
+    margin: 10px;
+}
+
+
+.flows-schedule-sim-container {
+    background-color: #6cd4ff;
+}
+
+.flow-form-container {
+    background-color: #6cd4ff;
+    flex-grow: 1;
+}
+
+.flow-display {
+    background-color: #6cd4ff;
+    display: flex;
+    flex-grow: 1;
+    width: 100%;
+}
+
+.simulation-form-container {
+    flex-grow: 1;
+}
+
+.table-row {
+    display: table-row;
+    background-color: #6cd4ff;
+}
+
+.large-button {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 20px;
+    position: relative;
+    padding: 0 10px;
+    font-size: 14px;
+    border: 0;
+    box-shadow: hsl(210deg 87% 36%) 0 7px 0 0;
+    background-color: hsl(210deg 100% 44%);
+    border-radius: 10px;
+    overflow: hidden;
+    transition: 31ms cubic-bezier(.5, .7, .4, 1);
+}
+
+.large-button:disabled {
+    box-shadow: none;
+    opacity: 0.5;
+}
+
+.large-button:active {
+    box-shadow: none;
+    transform: translateY(7px);
+    transition: 35ms cubic-bezier(.5, .7, .4, 1);
+}
+
+.small-button {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 20px;
+    position: relative;
+    padding: 0 10px;
+    font-size: 14px;
+    border: 0;
+    box-shadow: hsl(210deg 87% 36%) 0 3px 0 0;
+    background-color: hsl(210deg 100% 44%);
+    border-radius: 10px;
+    overflow: hidden;
+    transition: 31ms cubic-bezier(.5, .7, .4, 1);
+}
+
+.small-button:disabled {
+    box-shadow: none;
+    opacity: 0.5;
+}
+
+.small-button:active {
+    box-shadow: none;
+    transform: translateY(3px);
+    transition: 35ms cubic-bezier(.5, .7, .4, 1);
+}
+
+label {
+    background-color: #6cd4ff;
+    padding: 4px;
+}
+
+input {
+    background: white;
+    border-radius: 7px;
+}
+
+select {
+    background: white;
+    border-radius: 7px;
+}
+
+option {
+    background: white;
+}
+
+h3 {
+    background-color: #6cd4ff;
+}
+
+pre {
+    background-color: #6cd4ff;
+    font-family: 'Roberto Mono', monospace;
+}

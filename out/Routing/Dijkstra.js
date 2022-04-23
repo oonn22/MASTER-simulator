@@ -29,7 +29,6 @@ export function Dijkstra(source, destination, network) {
     }
     return path;
 }
-
 /**
  * Initializes the nodes of the network for performing Dijkstra's shortest path algorithm.
  * @param source
@@ -46,7 +45,6 @@ function initialize(source, network) {
         }
     }
 }
-
 function relax(nodeA, nodeB, weightScalingFactor, pq) {
     let rawWeight = nodeA.links.get(nodeB);
     if (rawWeight === undefined)
@@ -61,5 +59,4 @@ function relax(nodeA, nodeB, weightScalingFactor, pq) {
         pq.push(nodeB, adjustedWeight);
     }
 }
-
 //# sourceMappingURL=Dijkstra.js.map

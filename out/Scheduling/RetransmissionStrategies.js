@@ -12,7 +12,6 @@ export function Baseline(flow, network) {
         flow.hops.push(new Hop(flow.route[i], flow.route[i + 1], flow.id));
     }
 }
-
 /**
  * Adds hops to a flow using the slot based strategy. This strategy uses ceil(link etx) retransmissions for each hop
  * along the route of the flow.
@@ -32,7 +31,6 @@ export function SlotBased(flow, network) {
         }
     }
 }
-
 /**
  * Uses sliding window strategies to add  hops to a flow.
  * @param flow
@@ -76,7 +74,6 @@ export function SlidingWindow(flow, network, equationNumber, scalingFactor) {
         }
     }
 }
-
 /**
  * Creates even length sub flow routes based off of a route and the max length of a sub flow
  * @param route
@@ -97,7 +94,6 @@ function determineSubFlows(route, maxSubFlowLength) {
         routes.push(route);
     return routes;
 }
-
 /**
  * Determines the number of transmissions in a route and the size of the window for retransmissions.
  * @param route
@@ -120,5 +116,4 @@ function determineFlowCosts(route, network, equationNumber, scalingFactor) {
         cost = Math.ceil(cost);
     return [scalingFactor * cost, 2 + (scalingFactor * cost) - route.length];
 }
-
 //# sourceMappingURL=RetransmissionStrategies.js.map

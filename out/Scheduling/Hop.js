@@ -19,7 +19,6 @@ export class Hop {
         else
             this.destinations = destination;
     }
-
     toString() {
         let s = "";
         for (let i = 0; i < this.sources.length - 1; i++) {
@@ -30,5 +29,4 @@ export class Hop {
         return s;
     }
 }
-
 //# sourceMappingURL=Hop.js.map

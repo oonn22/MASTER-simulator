@@ -45,7 +45,8 @@ export class Simulator {
      * @param network - the network the schedule was created for
      */
     static simulateSchedule(schedule: Schedule, flows: Flow[], network: Network): { results: SimulationResults, unsuccessfulTransmissions: Flow[] } {
-        let simulated = {results: new SimulationResults(), unsuccessfulTransmissions: new Array<Flow>()};
+        let results = new SimulationResults();
+        let unsuccessfulTransmissions = new Array<Flow>();
         let flowIdMap = new Map<number, Flow>();
 
         for (let flow of flows) {
@@ -66,15 +67,18 @@ export class Simulator {
                 else throw new Error("Transmission's flow id doesn't exist");
             }
 
-            simulated.results.addRadiosOnInSlot(radiosOnInSlot);
+            results.addRadiosOnInSlot(radiosOnInSlot);
+
+            for (let flow of flows)
+                if (!flow.successfullyTransmitted) flow.timeSlotsUsedToTransmit++; //counts timeslots for unfinished flows. if flow had just finished, time slot is counted inside sim hop.
         }
 
         for (let flow of flows) {
-            simulated.results.addTransmission(flow.successfullyTransmitted, flow.timeSlotsUsedToTransmit * network.timeSlotSize);
-            if (!flow.successfullyTransmitted) simulated.unsuccessfulTransmissions.push(flow);
+            results.addTransmission(flow.successfullyTransmitted, flow.timeSlotsUsedToTransmit * network.timeSlotSize);
+            if (!flow.successfullyTransmitted) unsuccessfulTransmissions.push(flow);
         }
 
-        return simulated;
+        return {"results": results, "unsuccessfulTransmissions": unsuccessfulTransmissions};
     }
 
     /**
@@ -83,7 +87,7 @@ export class Simulator {
      * @return {Flow[]} - randomly generated flows
      */
     static generateRandomFlows(network: Network): Flow[] {
-        let numFlows = this.randInt(1, network.nodes.size);
+        let numFlows = this.randInt(1, Math.min(network.numChannels, 5));
         let nodes = [...network.nodes.values()];
         let flows = [];
 
@@ -115,21 +119,22 @@ export class Simulator {
 
         if (!flow.successfullyTransmitted) {
             let indexOfSource = t.sources.indexOf(flow.nodeWithMsg);
-            flow.timeSlotsUsedToTransmit++;
 
-            if (indexOfSource !== -1) {
-                let source = t.sources[indexOfSource];
-                let destination = t.destinations[indexOfSource];
-                let successfulTransmission = this.attemptTransmission(network.getLinkEtx(source, destination));
+            if (indexOfSource !== -1) { //node with message is scheduled in hop
+                let sourceId = t.sources[indexOfSource];
+                let destId = t.destinations[indexOfSource];
+                let successfulTransmission = this.attemptTransmission(network.getLinkEtx(sourceId, destId));
 
-                for (let i = indexOfSource; i < t.sources.length; i++) radiosOn.push(t.sources[i]);
-                radiosOn.push(t.destinations[t.destinations.length - 1]);
+                radiosOn.push(t.sources[indexOfSource]);
+                for (let i = indexOfSource; i < t.destinations.length; i++) radiosOn.push(t.destinations[i]);
 
-                if (successfulTransmission) flow.nodeWithMsg = destination;
+                if (successfulTransmission) flow.nodeWithMsg = destId;
+                if (flow.successfullyTransmitted) flow.timeSlotsUsedToTransmit++; //accounts for timeslot missed in main loop
 
-            } else {
-                for (let radio of t.sources) radiosOn.push(radio);
-                radiosOn.push(t.destinations[t.destinations.length - 1]);
+            } else { //message hasn't reached a node scheduled in the hop
+                //source nodes know they don't have the message to transmit
+                //destination nodes don't know yet and are waiting for a transmission
+                for (let radio of t.destinations) radiosOn.push(radio);
             }
         }
 

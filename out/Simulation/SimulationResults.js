@@ -7,7 +7,6 @@ export class SimulationResults {
         this._timeTransmitting = 0;
         this._numSlotsRadioOn = new Map();
     }
-
     /**
      * Adds the result of a flow to the overall results. This includes if the flow was able to reach its destination
      * following the schedule, and how long that took.
@@ -20,7 +19,6 @@ export class SimulationResults {
             this._numSuccessfulTransmissions++;
         this._timeTransmitting += timeTook;
     }
-
     /**
      * Tracks which radios were on in a timeslot.
      * @param radiosOn - the nodes either transmitting or receiving in a timeslot
@@ -31,11 +29,10 @@ export class SimulationResults {
             this._numSlotsRadioOn.set(radio, (this._numSlotsRadioOn.get(radio) ?? 0) + 1);
         }
     }
-
     toString(timeSlotSize) {
         let s = "Total Transmissions: " + this._numTransmissions +
             " Successful Transmissions: " + this._numSuccessfulTransmissions +
-            " Simulation Duration: " + this._numTimeSlots * timeSlotSize + "ms\n";
+            " Simulation Duration: " + this.timeSimulated(timeSlotSize) + "ms\n";
         s += "Network Reliability: " +
             (this._numSuccessfulTransmissions / this._numTransmissions).toLocaleString("en", {
                 style: "percent",
@@ -59,6 +56,10 @@ export class SimulationResults {
         return s;
     }
 
+    timeSimulated(timeSlotSize) {
+        return this._numTimeSlots * timeSlotSize;
+    }
+
     get numTransmissions() {
         return this._numTransmissions;
     }
@@ -74,11 +75,9 @@ export class SimulationResults {
     get numTimeSlots() {
         return this._numTimeSlots;
     }
-
     get numSlotsRadioOn() {
         return this._numSlotsRadioOn;
     }
-
     /**
      * Adds the results of some other simulation to self.
      * @param results
@@ -93,5 +92,4 @@ export class SimulationResults {
         }
     }
 }
-
 //# sourceMappingURL=SimulationResults.js.map

@@ -3,7 +3,6 @@ export class Schedule {
     constructor(schedule) {
         this.schedule = schedule;
     }
-
     //Only way to access schedule is to use this iterator, is done this way as schedule
     //is created in reverse order
     [Symbol.iterator]() {
@@ -18,12 +17,10 @@ export class Schedule {
             }
         };
     }
-
     /** returns the number of timeslots used by this schedule */
     get length() {
         return this.schedule.length;
     }
-
     toString(timeSlotSize) {
         let numChannels = this.schedule[0].numChannels;
         let display = [];
@@ -59,5 +56,4 @@ export class Schedule {
         return s;
     }
 }
-
 //# sourceMappingURL=Schedule.js.map

@@ -6,10 +6,8 @@ export class Router {
         for (let flow of flows)
             this.route(flow, network);
     }
-
     static route(flow, network) {
         flow.route = Dijkstra(flow.source, flow.destination, network);
     }
 }
-
 //# sourceMappingURL=Router.js.map

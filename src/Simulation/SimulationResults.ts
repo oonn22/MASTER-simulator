@@ -43,7 +43,7 @@ export class SimulationResults {
     toString(timeSlotSize: number) {
         let s = "Total Transmissions: " + this._numTransmissions +
             " Successful Transmissions: " + this._numSuccessfulTransmissions +
-            " Simulation Duration: " + this._numTimeSlots * timeSlotSize + "ms\n";
+            " Simulation Duration: " + this.timeSimulated(timeSlotSize) + "ms\n";
 
         s += "Network Reliability: " +
             (this._numSuccessfulTransmissions / this._numTransmissions).toLocaleString("en", {
@@ -71,6 +71,10 @@ export class SimulationResults {
         s += "Average radio on time: " + (sumRadioOnTime / this._numSlotsRadioOn.size).toLocaleString("en", {style: "percent"})
 
         return s;
+    }
+
+    timeSimulated(timeSlotSize: number) {
+        return this._numTimeSlots * timeSlotSize;
     }
 
     get numTransmissions() {

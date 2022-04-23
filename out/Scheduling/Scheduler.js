@@ -29,7 +29,6 @@ export class Scheduler {
         }
         return this.reverseLongestPathFirst(flows, network);
     }
-
     static reverseLongestPathFirst(flows, network) {
         let schedule = [];
         flows.sort((a, b) => {
@@ -52,5 +51,4 @@ export class Scheduler {
         return new Schedule(schedule);
     }
 }
-
 //# sourceMappingURL=Scheduler.js.map

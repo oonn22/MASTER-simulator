@@ -10,6 +10,9 @@
  * @property {NetworkNode | undefined} prev - A value used for routing flows in the network. It holds the node with the
  *                                            shortest path to this node.
  *
+ * @property {NetworkNode | undefined} pathToNodeWeight - A value used for routing flows in the network. It holds the
+ *                                                        weight of the shortest path to this node.
+ *
  * @property {boolean} visited - A value used for routing flows in the network. It indicates whether the routing process
  *                               has already been to this node or not.
  */

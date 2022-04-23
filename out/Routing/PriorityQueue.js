@@ -4,7 +4,6 @@ export class PriorityQueue {
         this.heap = [];
         this.itemIndex = new Map();
     }
-
     /**
      * adds item to priority queue. If value already exists, priority is updated.
      * @param value - the value to store in the queue.
@@ -25,7 +24,6 @@ export class PriorityQueue {
             this.swapUp(this.heap.length - 1);
         }
     }
-
     /**
      * @return - returns the highest priority item in the queue (the item ith the lowest priority, is considered
      *           highest priority) or undefined if queue is empty.
@@ -45,7 +43,6 @@ export class PriorityQueue {
         } else
             return undefined;
     }
-
     swapUp(index) {
         let currIndex = index;
         let parentIndex = PriorityQueue.getParentIndex(currIndex);
@@ -58,7 +55,6 @@ export class PriorityQueue {
             parent = this.heap[parentIndex];
         }
     }
-
     swapDown(index) {
         let currIndex = index;
         let leftIndex = PriorityQueue.getLeftChildIndex(currIndex);
@@ -89,7 +85,6 @@ export class PriorityQueue {
             }
         }
     }
-
     swap(index1, index2) {
         let tempItem = this.heap[index1];
         this.heap[index1] = this.heap[index2];
@@ -97,20 +92,16 @@ export class PriorityQueue {
         this.itemIndex.set(this.heap[index1].value, index1);
         this.itemIndex.set(this.heap[index2].value, index2);
     }
-
     static getParentIndex(index) {
         return index === 0 ? 0 : Math.floor((index - 1) / 2);
     }
-
     static getLeftChildIndex(index) {
         return (2 * index) + 1;
     }
-
     static getRightChildIndex(index) {
         return (2 * index) + 2;
     }
 }
-
 /**
  * A class representing an item in a priority queue.
  *
@@ -123,5 +114,4 @@ class QueueItem {
         this.priority = priority;
     }
 }
-
 //# sourceMappingURL=PriorityQueue.js.map

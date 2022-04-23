@@ -30,20 +30,17 @@ export class Flow {
         this.hops = [];
         this.nodeWithMsg = source;
         this.timeSlotsUsedToTransmit = 0;
-        Flow.nextId++;
+        Flow.nextId = (Flow.nextId + 1) % 256;
     }
-
     /**
      * @return {boolean} - returns whether the flow has successfully transmitted its message to its destination or not
      */
     get successfullyTransmitted() {
         return this.nodeWithMsg === this.destination;
     }
-
     toString() {
         return "Source node: " + this.source + " Destination node: " + this.destination + " (Flow ID: " + this.id + ")";
     }
-
     /**
      * @return {string} - returns a string representation of the route to be taken by the flows message.
      */
@@ -55,6 +52,5 @@ export class Flow {
         return s.slice(0, s.length - 4) + " (id: " + this.id.toString() + ")";
     }
 }
-
 Flow.nextId = 0; //used to assign unique id if not given
 //# sourceMappingURL=Flow.js.map

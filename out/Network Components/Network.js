@@ -29,13 +29,12 @@ export class Network {
     constructor() {
         this.nodes = new Map();
         this.timeSlotSize = 10;
-        this.numChannels = 16;
+        this.numChannels = 4;
         this.etxPower = 2;
         this.maxFlowLength = 10;
         this.scalingFactor = 1;
         this.retransmissionStrategy = "baseline";
     }
-
     /**
      * Adds a link between nodes to the network. network must remain connected, so adding will fail if the added link
      * isn't connected to rest of network.
@@ -45,9 +44,9 @@ export class Network {
      * @return {boolean} - indicates whether link was successfully added
      */
     addLink(nodeA, nodeB, etx) {
-        if (etx < 1)
+        if (etx < 1 || nodeA === nodeB || nodeA.length === 0 || nodeB.length === 0)
             return false;
-        else if (nodeA === nodeB)
+        else if (this.getLinkEtx(nodeA, nodeB) !== 0)
             return false;
         else if (this.nodes.size !== 0 && !this.nodes.has(nodeA) && !this.nodes.has(nodeB))
             return false;
@@ -61,7 +60,6 @@ export class Network {
             return true;
         }
     }
-
     addLinkBetween(a, b, etx) {
         let nodeA = this.nodes.get(a);
         let nodeB = this.nodes.get(b);
@@ -70,7 +68,6 @@ export class Network {
         nodeA.addLink(nodeB, etx);
         nodeB.addLink(nodeA, etx);
     }
-
     /**
      * gets the expected transmission count of the link between two nodes, if a link exists
      * @param idA - ID of first node
@@ -90,6 +87,23 @@ export class Network {
             return 0;
     }
 
+    /**
+     * Changes the ETX value of a link between nodes, if existing, to the provided etx value.
+     * @param idA
+     * @param idB
+     * @param etx
+     */
+    editLinkEtx(idA, idB, etx) {
+        if (etx >= 1 && this.getLinkEtx(idA, idB) !== 0) { //if the provided nodes are connected and etx valid
+            let nodeA = this.nodes.get(idA);
+            let nodeB = this.nodes.get(idB);
+            if (nodeA !== undefined && nodeB !== undefined) {
+                nodeA.links.set(nodeB, etx);
+                nodeB.links.set(nodeA, etx);
+            }
+        }
+    }
+
     toString() {
         let str = "";
         let processedLinks = new Set();
@@ -105,6 +119,33 @@ export class Network {
         }
         return str;
     }
-}
 
+    /**
+     * Creates a representation of the network that can be displayed with D3 and WebCola
+     * @return {nodes: {name: string, width: number, height: number}[], links: {source: number, target: number, etx: number}[]}
+     */
+    toGraphableObject() {
+        let nodes = [];
+        let links = [];
+        let nodeIndex = new Map();
+        let i = 0;
+        for (let nodeID of this.nodes.keys()) {
+            nodes.push({"name": nodeID, "width": 60, "height": 40});
+            nodeIndex.set(nodeID, i);
+            i++;
+        }
+        for (let nodeA of this.nodes.values()) {
+            let source = nodeIndex.get(nodeA.id);
+            if (source === undefined)
+                throw new Error("Error not all nodes in graph!");
+            for (let nodeB of nodeA.links.keys()) {
+                let target = nodeIndex.get(nodeB.id);
+                if (target === undefined)
+                    throw new Error("Error not all nodes in graph!");
+                links.push({"source": source, "target": target, "etx": this.getLinkEtx(nodeA.id, nodeB.id)});
+            }
+        }
+        return {"nodes": nodes, "links": links};
+    }
+}
 //# sourceMappingURL=Network.js.map

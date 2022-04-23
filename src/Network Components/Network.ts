@@ -37,7 +37,7 @@ export class Network {
     constructor() {
         this.nodes = new Map<string, NetworkNode>();
         this.timeSlotSize = 10;
-        this.numChannels = 16;
+        this.numChannels = 4;
         this.etxPower = 2;
         this.maxFlowLength = 10;
         this.scalingFactor = 1;
@@ -53,8 +53,8 @@ export class Network {
      * @return {boolean} - indicates whether link was successfully added
      */
     addLink(nodeA: string, nodeB: string, etx: number): boolean {
-        if (etx < 1) return false;
-        else if (nodeA === nodeB) return false;
+        if (etx < 1 || nodeA === nodeB || nodeA.length === 0 || nodeB.length === 0) return false;
+        else if (this.getLinkEtx(nodeA, nodeB) !== 0) return false;
         else if (this.nodes.size !== 0 && !this.nodes.has(nodeA) && !this.nodes.has(nodeB)) return false;
         else {
             if (!this.nodes.has(nodeA)) this.nodes.set(nodeA, new NetworkNode(nodeA));
@@ -95,6 +95,24 @@ export class Network {
         } else return 0;
     }
 
+    /**
+     * Changes the ETX value of a link between nodes, if existing, to the provided etx value.
+     * @param idA
+     * @param idB
+     * @param etx
+     */
+    editLinkEtx(idA: string, idB: string, etx: number): void {
+        if (etx >= 1 && this.getLinkEtx(idA, idB) !== 0) { //if the provided nodes are connected and etx valid
+            let nodeA = this.nodes.get(idA);
+            let nodeB = this.nodes.get(idB);
+
+            if (nodeA !== undefined && nodeB !== undefined) {
+                nodeA.links.set(nodeB, etx);
+                nodeB.links.set(nodeA, etx);
+            }
+        }
+    }
+
     toString(): string {
         let str = "";
         let processedLinks = new Set<string>();
@@ -111,6 +129,36 @@ export class Network {
         }
 
         return str;
+    }
+
+    /**
+     * Creates a representation of the network that can be displayed with D3 and WebCola
+     * @return {nodes: {name: string, width: number, height: number}[], links: {source: number, target: number, etx: number}[]}
+     */
+    toGraphableObject() {
+        let nodes = [];
+        let links = [];
+        let nodeIndex = new Map<string, number>();
+
+        let i = 0;
+        for (let nodeID of this.nodes.keys()) {
+            nodes.push({"name": nodeID, "width": 60, "height": 40});
+            nodeIndex.set(nodeID, i);
+            i++;
+        }
+
+        for (let nodeA of this.nodes.values()) {
+            let source = nodeIndex.get(nodeA.id);
+            if (source === undefined) throw new Error("Error not all nodes in graph!");
+
+            for (let nodeB of nodeA.links.keys()) {
+                let target = nodeIndex.get(nodeB.id);
+                if (target === undefined) throw new Error("Error not all nodes in graph!");
+                links.push({"source": source, "target": target, "etx": this.getLinkEtx(nodeA.id, nodeB.id)});
+            }
+        }
+
+        return {"nodes": nodes, "links": links};
     }
 }
 
